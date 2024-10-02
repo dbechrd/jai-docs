@@ -10,7 +10,11 @@ It's unclear to me how this differs from #foreign.
 
 ## #foreign
 
-Purpose unknown.
+#foreign without a library identifier is mainly just for the case of 'function pointers'. You should not use it if you are really linking a known lib, because if you do that, you are re-encouraging the shitburger C behavior of silently getting a random/wrong declaration for your symbol if there is more than 1. We are trying to root out all that kind of unsoundness and not assume any of it in this system.
+
+You can't use #foreign without a library name if the declaration is constant. The only time you see that is when something is a variable that is set at runtime by looking up a function, for example in the GL bindings. In this case #foreign just means #c_call because the #elsewhere part doesn't do anything. We should probably replace all those in the modules with just #c_call.
+
+Those are variables, not constants. They aren't trying to link into any library, so in this case #foreign really just means #c_call and we should probably change that.
 
 ## #library
 
